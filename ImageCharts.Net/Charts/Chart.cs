@@ -1,4 +1,5 @@
 ﻿using ImageCharts.Net.ChartProperties;
+using System.Collections.Generic;
 using System.Text;
 
 namespace ImageCharts.Net.Charts
@@ -30,7 +31,17 @@ namespace ImageCharts.Net.Charts
         /// <summary>
         /// The margin of the chart inrespect to the borders of the image
         /// </summary>
-        public (int LeftMargin, int RightMargin, int TopMargin, int BottomMargin) Margin { get; set; }
+        public (int MarginLeft, int MarginRight, int MarginTop, int MarginBottom) Margin { get; set; }
+
+        /// <summary>
+        /// Collection of strings that will be displayed as legend items
+        /// </summary>
+        public IEnumerable<string> LegendItems { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Fill Fill { get; set; }
 
         public Chart()
         {
@@ -43,7 +54,7 @@ namespace ImageCharts.Net.Charts
         }
 
         /// <summary>
-        /// Gets the url that can be used to retrieve a plotted chart from the imagecharts service with the current properties of the chart object
+        /// Gets a url that can be used to retrieve a plotted chart from the imagecharts service with the current properties of the chart object
         /// </summary>
         public string GetUrl()
         {
@@ -53,20 +64,36 @@ namespace ImageCharts.Net.Charts
             urlStringBuilder.Append($"?chs={this.ChartWidth}x{this.ChartHeight}");
 
             // Add chart title and its properties as url parameters
-            urlStringBuilder.Append($"&chtt={this.ChartTitle}&chts={this.ChartTitle.GetTextColorString()},{this.ChartTitle.FontSize}");
+            urlStringBuilder.Append($"&chtt={this.ChartTitle}&chts={this.ChartTitle.TextColor.GetHexString()},{this.ChartTitle.FontSize}");
 
             // Add chart data as url parameter
             urlStringBuilder.Append($"&chd={ChartDataEncoder.GetFormatSpecifier(this.ChartData)}:{ChartDataEncoder.GetEncodedValues(this.ChartData)}");
 
             // Add scaling for chart data (if necessary) as url parameter
             if (this.ChartData.DataFormat == DataFormat.TextFormatAutomaticScaling || this.ChartData.DataFormat == DataFormat.TextFormatCustomScaling)
+            {
                 urlStringBuilder.Append($"$chds={ChartDataEncoder.GetScalingSpecifier(this.ChartData)}");
+            }
 
             // Add labels for data series as url parameter
-            urlStringBuilder.Append($"&chdl={this.ChartData.GetDataSeriesLabelString()}");
+            urlStringBuilder.Append($"&chdl={string.Join("|", this.LegendItems)}");
 
             // Add chart margin as url parameter
-            urlStringBuilder.Append($"&chma={this.Margin.LeftMargin},{this.Margin.RightMargin},{this.Margin.TopMargin},{this.Margin.BottomMargin}");
+            urlStringBuilder.Append($"&chma={this.Margin.MarginLeft},{this.Margin.MarginRight},{this.Margin.MarginTop},{this.Margin.MarginBottom}");
+
+            urlStringBuilder.Append("&chf=");
+
+            if (this.Fill is ColorFill colorFill)
+            {
+                urlStringBuilder.Append($"{this.Fill.GetFillTypeSpecifier()},s,{colorFill.Color.GetHexString()}");
+            }
+            else if (this.Fill is GradientFill gradientFill)
+            {
+                urlStringBuilder.Append($"{this.Fill.GetFillTypeSpecifier()},lg,{gradientFill.FirstColor.CenterPoint},{gradientFill.FirstColor.Color.GetHexString()}," +
+                    $"{gradientFill.SecondColor.CenterPoint},{gradientFill.SecondColor.Color.GetHexString()}");
+            }
+
+
 
             return urlStringBuilder.ToString();
         }

@@ -16,8 +16,6 @@ namespace ImageCharts.Net.ChartProperties
 
         public int FontSize { get; set; } = 15;
 
-        public string GetTextColorString() => $"{this.TextColor.R:X2}{this.TextColor.G:X2}{this.TextColor.B:X2}{this.TextColor.A:X2}";
-
         public ChartTitle(string text)
         {
             this.Text = text;

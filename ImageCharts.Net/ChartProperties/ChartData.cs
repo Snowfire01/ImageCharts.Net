@@ -62,7 +62,7 @@ namespace ImageCharts.Net.ChartProperties
             this.CustomScalings = customScalings ?? new List<(double min, double max)>();
         }
 
-        public string GetDataSeriesLabelString()
+        public override string ToString()
         {
             var dataSeriesLabels = this.DataSeries
                 .Where(x => !string.IsNullOrWhiteSpace(x.Label))
