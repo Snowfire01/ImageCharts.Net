@@ -2,7 +2,7 @@
 
 namespace ImageCharts.Net.ChartProperties
 {
-    public class ColorFill : Fill
+    public class SingleColorFill : Fill
     {
         public Color Color { get; set; }
     }

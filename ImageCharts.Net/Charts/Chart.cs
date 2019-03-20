@@ -42,7 +42,7 @@ namespace ImageCharts.Net.Charts
         public IEnumerable<string> LegendItems { get; set; }
 
         /// <summary>
-        /// The background fill of the chart. Can be either a <see cref="ColorFill"/> for single-color-backgrounds or a <see cref="GradientFill"/> for gradient backgrounds
+        /// The background fill of the chart. Can be either a <see cref="SingleColorFill"/> for single-color-backgrounds or a <see cref="GradientFill"/> for gradient backgrounds
         /// </summary>
         public Fill Fill { get; set; }
 
@@ -63,7 +63,7 @@ namespace ImageCharts.Net.Charts
         /// <param name="duration">The duration of the gif in milliesconds (maximum is 1500)</param>
         /// <param name="easing">The easing type of the animation.</param>
         public string GetUrlAnimated(int duration, AnimationEasing easing) =>
-            $"{this.GetUrl()}&chan={duration},{char.ToLower(easing.ToString()[0])}{easing.ToString().Substring(1)}&chof=.gif";
+            $"{this.GetUrl()}&chan={duration},{char.ToLower(easing.ToString()[0])}{easing.ToString().Substring(1)}";
 
         /// <summary>
         /// Gets a url that can be used to retrieve a plotted chart from the imagecharts service with the current properties of the chart object
@@ -73,7 +73,10 @@ namespace ImageCharts.Net.Charts
             var urlStringBuilder = new StringBuilder(this.imagechartsBaseUrl);
 
             // Add chart width and height as url parameters
-            urlStringBuilder.Append($"?chs={this.ChartWidth}x{this.ChartHeight}");
+            urlStringBuilder.Append($"?cht={this.GetChartTypeSpecifier()}");
+
+            // Add chart width and height as url parameters
+            urlStringBuilder.Append($"&chs={this.ChartWidth}x{this.ChartHeight}");
 
             // Add chart title and its properties as url parameters
             urlStringBuilder.Append($"&chtt={this.ChartTitle}&chts={this.ChartTitle.TextColor.GetHexString()},{this.ChartTitle.FontSize}");
@@ -96,22 +99,24 @@ namespace ImageCharts.Net.Charts
             // Add chart margin as url parameter
             urlStringBuilder.Append($"&chma={this.Margin.MarginLeft},{this.Margin.MarginRight},{this.Margin.MarginTop},{this.Margin.MarginBottom}");
 
-            urlStringBuilder.Append("&chf=");
-
-            if (this.Fill is ColorFill colorFill)
+            if (this.Fill != null)
             {
-                urlStringBuilder.Append($"{this.Fill.GetFillTypeSpecifier()},s,{colorFill.Color.GetHexString()}");
-            }
-            else if (this.Fill is GradientFill gradientFill)
-            {
-                urlStringBuilder.Append($"{this.Fill.GetFillTypeSpecifier()},lg,{gradientFill.FirstColor.CenterPoint},{gradientFill.FirstColor.Color.GetHexString()}," +
-                    $"{gradientFill.SecondColor.CenterPoint},{gradientFill.SecondColor.Color.GetHexString()}");
-            }
+                urlStringBuilder.Append("&chf=");
 
-            // Some software like Flowdock, Slack or Facebook messenger (and so on...) needs an URL that ends with a valid image extension file to display it as an image.
-            urlStringBuilder.Append("&chof=.png");
+                if (this.Fill is SingleColorFill colorFill)
+                {
+                    urlStringBuilder.Append($"{this.Fill.GetFillTypeSpecifier()},s,{colorFill.Color.GetHexString()}");
+                }
+                else if (this.Fill is GradientFill gradientFill)
+                {
+                    urlStringBuilder.Append($"{this.Fill.GetFillTypeSpecifier()},lg,{gradientFill.Angle}," +
+                        $"{string.Join(",", gradientFill.GradientColors.Select(x => $"{x.Color.GetHexString()},{x.CenterPoint}"))}");
+                }
+            }
 
             return urlStringBuilder.ToString();
         }
+
+        protected abstract string GetChartTypeSpecifier();
     }
 }
