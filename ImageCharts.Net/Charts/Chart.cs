@@ -55,6 +55,15 @@ namespace ImageCharts.Net.Charts
 
         /// <summary>
         /// Gets a url that can be used to retrieve a plotted chart from the imagecharts service with the current properties of the chart object
+        /// that is an animated gif.
+        /// </summary>
+        /// <param name="duration">The duration of the gif in milliesconds (maximum is 1500)</param>
+        /// <param name="easing">The easing type of the animation.</param>
+        public string GetUrlAnimated(int duration, AnimationEasing easing) =>
+            $"{this.GetUrl()}&chan={duration},{char.ToLower(easing.ToString()[0])}{easing.ToString().Substring(1)}&chof=.gif";
+
+        /// <summary>
+        /// Gets a url that can be used to retrieve a plotted chart from the imagecharts service with the current properties of the chart object
         /// </summary>
         public string GetUrl()
         {
@@ -93,7 +102,8 @@ namespace ImageCharts.Net.Charts
                     $"{gradientFill.SecondColor.CenterPoint},{gradientFill.SecondColor.Color.GetHexString()}");
             }
 
-
+            // Some software like Flowdock, Slack or Facebook messenger (and so on...) needs an URL that ends with a valid image extension file to display it as an image.
+            urlStringBuilder.Append("$chof=.png");
 
             return urlStringBuilder.ToString();
         }
