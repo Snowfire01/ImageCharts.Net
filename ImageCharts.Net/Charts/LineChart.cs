@@ -18,6 +18,16 @@ namespace ImageCharts.Net.Charts
             this.LineChartStyle = lineChartStyle;
         }
 
+        public new string GetUrlAnimated(int duration, AnimationEasing animationEasing)
+        {
+            var urlStringBuilder = new StringBuilder(base.GetUrlAnimated(duration, animationEasing));
+
+            // Some software like Flowdock, Slack or Facebook messenger (and so on...) needs an URL that ends with a valid image extension file to display it as an image.
+            urlStringBuilder.Append("&chof=.gif");
+
+            return urlStringBuilder.ToString();
+        }
+
         public new string GetUrl()
         {
             var urlStringBuilder = new StringBuilder(base.GetUrl());
@@ -80,6 +90,9 @@ namespace ImageCharts.Net.Charts
 
                 urlStringBuilder.Append(string.Join("|", lineStyleStrings));
             }
+
+            // Some software like Flowdock, Slack or Facebook messenger (and so on...) needs an URL that ends with a valid image extension file to display it as an image.
+            urlStringBuilder.Append("&chof=.png");
 
             return urlStringBuilder.ToString();
         }

@@ -20,10 +20,6 @@ namespace ImageCharts.Net.ChartProperties
                     return "bg";
                 case Filltype.ChartAreaFill:
                     return "c";
-                case Filltype.BarChartFill:
-                    return "b";
-                case Filltype.SliceFill:
-                    return "ps";
                 default:
                     return null;
             }

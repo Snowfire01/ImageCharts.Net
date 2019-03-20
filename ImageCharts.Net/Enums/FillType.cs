@@ -13,16 +13,6 @@
         /// <summary>
         /// Fills only the chart area (currently same as <see cref="BackgroundFill"/>)
         /// </summary>
-        ChartAreaFill,
-
-        /// <summary>
-        /// Fills the bars of a bar chart
-        /// </summary>
-        BarChartFill,
-
-        /// <summary>
-        /// Fills the slices of a pie chart, polar area chart or bubble chart
-        /// </summary>
-        SliceFill
+        ChartAreaFill
     }
 }
