@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Leon Schreiber</Authors>
     <SignAssembly>false</SignAssembly>
-    <Version>1.0.2</Version>
+    <Version>0.0.4</Version>
   </PropertyGroup>
 
 </Project>

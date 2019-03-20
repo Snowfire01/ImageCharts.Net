@@ -1,5 +1,8 @@
 ﻿using ImageCharts.Net.ChartProperties;
+using ImageCharts.Net.Enums;
+using ImageCharts.Net.Helpers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ImageCharts.Net.Charts
@@ -39,7 +42,7 @@ namespace ImageCharts.Net.Charts
         public IEnumerable<string> LegendItems { get; set; }
 
         /// <summary>
-        /// 
+        /// The background fill of the chart. Can be either a <see cref="ColorFill"/> for single-color-backgrounds or a <see cref="GradientFill"/> for gradient backgrounds
         /// </summary>
         public Fill Fill { get; set; }
 
@@ -87,6 +90,9 @@ namespace ImageCharts.Net.Charts
             // Add labels for data series as url parameter
             urlStringBuilder.Append($"&chdl={string.Join("|", this.LegendItems)}");
 
+            // Add labels for each data point
+            urlStringBuilder.Append($"&chl={string.Join("|", this.ChartData.GetDataPoints().Select(x => x.Label))}");
+
             // Add chart margin as url parameter
             urlStringBuilder.Append($"&chma={this.Margin.MarginLeft},{this.Margin.MarginRight},{this.Margin.MarginTop},{this.Margin.MarginBottom}");
 
@@ -103,7 +109,7 @@ namespace ImageCharts.Net.Charts
             }
 
             // Some software like Flowdock, Slack or Facebook messenger (and so on...) needs an URL that ends with a valid image extension file to display it as an image.
-            urlStringBuilder.Append("$chof=.png");
+            urlStringBuilder.Append("&chof=.png");
 
             return urlStringBuilder.ToString();
         }

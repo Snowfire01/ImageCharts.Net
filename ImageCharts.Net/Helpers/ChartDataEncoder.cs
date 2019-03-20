@@ -1,17 +1,18 @@
 ﻿using ImageCharts.Net.ChartProperties;
+using ImageCharts.Net.Enums;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace ImageCharts.Net
+namespace ImageCharts.Net.Helpers
 {
-    public static class ChartDataEncoder
+    internal static class ChartDataEncoder
     {
         private static string encoderString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.";
 
-        public static string GetScalingSpecifier(ChartData data)
+        internal static string GetScalingSpecifier(ChartData data)
         {
             switch (data.DataFormat)
             {
@@ -26,7 +27,7 @@ namespace ImageCharts.Net
             }
         }
 
-        public static string GetFormatSpecifier(ChartData data)
+        internal static string GetFormatSpecifier(ChartData data)
         {
             switch (data.DataFormat)
             {
@@ -45,7 +46,7 @@ namespace ImageCharts.Net
             }
         }
 
-        public static string GetEncodedValues(ChartData data)
+        internal static string GetEncodedValues(ChartData data)
         {
             switch (data.DataFormat)
             {

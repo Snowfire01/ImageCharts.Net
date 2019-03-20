@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageCharts.Net
+namespace ImageCharts.Net.Enums
 {
     public enum AnimationEasing
     {

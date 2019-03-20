@@ -1,4 +1,4 @@
-﻿namespace ImageCharts.Net
+﻿namespace ImageCharts.Net.Enums
 {
     public enum DataFormat
     {

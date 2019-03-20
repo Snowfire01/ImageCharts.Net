@@ -4,6 +4,6 @@
     {
         public double? Value { get; set; }
 
-        public string Label { get; set; }
+        public string Label { get; set; } = string.Empty;
     }
 }

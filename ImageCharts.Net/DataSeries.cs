@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace ImageCharts.Net
@@ -7,12 +8,9 @@ namespace ImageCharts.Net
     {
         public List<DataPoint> DataPoints { get; set; }
 
-        public string Label { get; set; }
-
-        public DataSeries(IEnumerable<DataPoint> dataPoints = null, string label = "")
+        public DataSeries(IEnumerable<DataPoint> dataPoints = null)
         {
             this.DataPoints = dataPoints?.ToList() ?? new List<DataPoint>();
-            this.Label = label;
         }
     }
 }

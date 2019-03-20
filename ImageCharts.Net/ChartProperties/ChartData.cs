@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ImageCharts.Net.Enums;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ImageCharts.Net.ChartProperties
@@ -62,15 +63,20 @@ namespace ImageCharts.Net.ChartProperties
             this.CustomScalings = customScalings ?? new List<(double min, double max)>();
         }
 
-        public override string ToString()
+        /// <summary>
+        /// Gets all data points of the data set as a single enumerable instead of encapsulated in their respective data series
+        /// </summary>
+        /// <returns></returns>
+        public List<DataPoint> GetDataPoints()
         {
-            var dataSeriesLabels = this.DataSeries
-                .Where(x => !string.IsNullOrWhiteSpace(x.Label))
-                .Select(x => x.Label)
-                .ToList();
+            var returnValue = new List<DataPoint>();
 
-            return string.Join("|", dataSeriesLabels)
-                .Replace(' ', '+');
+            foreach (var dataSeries in this.DataSeries)
+            {
+                returnValue.AddRange(dataSeries.DataPoints);
+            }
+
+            return returnValue;
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ImageCharts.Net
+﻿namespace ImageCharts.Net.Enums
 {
     /// <summary>
     /// Types of background fills that can be used for a chart
