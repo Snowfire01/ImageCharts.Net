@@ -4,63 +4,56 @@ using System.Linq;
 
 namespace ImageCharts.Net.ChartProperties
 {
+    /// <summary>
+    /// Represents the data set out of which the graph will be generated
+    /// </summary>
     public class ChartData
     {
-        public DataFormat DataFormat { get; set; }
+        /// <summary>
+        /// Data format that will be used to encode the data in the url. Default is <see cref="DataFormat.AwesomeDataFormat"/> which is highly recommended and
+        /// best suited in most, if not all, situations
+        /// </summary>
+        public DataFormat DataFormat { get; set; } = DataFormat.AwesomeDataFormat;
 
+        /// <summary>
+        /// The data series that make up the data
+        /// </summary>
         public List<DataSeries> DataSeries { get; set; }
 
+        /// <summary>
+        /// Custom scaling. This feature works only with text-formatted values, and does not work with all chart types. 
+        /// </summary>
         public List<(double Min, double Max)> CustomScalings { get; set; }
 
-        public ChartData(DataFormat dataFormat, List<(double min, double max)> customScalings = null)
+        public ChartData()
         {
-            this.DataFormat = dataFormat;
             this.DataSeries = new List<DataSeries>();
-            this.CustomScalings = customScalings ?? new List<(double min, double max)>();
         }
 
-        public ChartData(DataFormat dataFormat, List<(double min, double max)> customScalings = null, params DataPoint[] dataPoints)
+        public ChartData(params DataPoint[] dataPoints)
         {
-            this.DataFormat = dataFormat;
-
             this.DataSeries = new List<DataSeries>
             {
-                new DataSeries
-                {
-                    DataPoints = dataPoints.ToList()
-                }
+                new DataSeries(dataPoints)
             };
-
-            this.CustomScalings = customScalings ?? new List<(double min, double max)>();
         }
 
-        public ChartData(DataFormat dataFormat, List<(double min, double max)> customScalings = null, params DataSeries[] dataSeries)
+        public ChartData(params DataSeries[] dataSeries)
         {
-            this.DataFormat = dataFormat;
             this.DataSeries = dataSeries.ToList();
-            this.CustomScalings = customScalings ?? new List<(double min, double max)>();
         }
 
-        public ChartData(DataFormat dataFormat, IEnumerable<DataPoint> dataPoints, List<(double min, double max)> customScalings = null)
+        public ChartData(IEnumerable<DataPoint> dataPoints)
         {
-            this.DataFormat = dataFormat;
-
             this.DataSeries = new List<DataSeries>
             {
-                 new DataSeries
-                {
-                    DataPoints = dataPoints.ToList()
-                }
+                 new DataSeries(dataPoints)
             };
-
-            this.CustomScalings = customScalings ?? new List<(double min, double max)>();
         }
 
-        public ChartData(DataFormat dataFormat, IEnumerable<DataSeries> dataSeries, List<(double min, double max)> customScalings = null)
+        public ChartData(IEnumerable<DataSeries> dataSeries)
         {
-            this.DataFormat = dataFormat;
             this.DataSeries = DataSeries.ToList();
-            this.CustomScalings = customScalings ?? new List<(double min, double max)>();
         }
 
         /// <summary>

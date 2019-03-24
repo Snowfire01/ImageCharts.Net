@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ImageCharts.Net.Enums
+﻿namespace ImageCharts.Net.Enums
 {
     public enum ChartProperty
     {

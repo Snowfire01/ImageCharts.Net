@@ -3,7 +3,7 @@
 namespace ImageCharts.Net.ChartProperties
 {
     /// <summary>
-    /// Encapsulates configuration options for the title text of a chart
+    /// Describes the properties of the title text of a chart
     /// </summary>
     public class ChartTitle
     {
@@ -12,13 +12,37 @@ namespace ImageCharts.Net.ChartProperties
         /// </summary>
         public string Text { get; set; } = string.Empty;
 
-        public Color TextColor { get; set; } = Color.FromArgb(alpha: 0xFF, red: 0x0, green: 0x0, blue: 0x0);
+        /// <summary>
+        /// The font color of the title. Default is black.
+        /// </summary>
+        public Color TextColor { get; set; } = Color.Black;
 
+        /// <summary>
+        /// The font size of the title
+        /// </summary>
         public int FontSize { get; set; } = 15;
 
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="ChartTitle"/>
+        /// </summary>
+        /// <param name="text">The text that will be displayed as the title of the chart. Warning: line breaks don't work!</param>
         public ChartTitle(string text)
         {
             this.Text = text;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="ChartTitle"/>
+        /// </summary>
+        /// <param name="text">The text that will be displayed as the title of the chart. Warning: line breaks don't work!</param>
+        /// <param name="textColor">The font color of the title</param>
+        /// <param name="fontSize">The font size of the title</param>
+        public ChartTitle(string text, Color textColor, int fontSize = 15)
+        {
+            this.Text = text;
+            this.TextColor = textColor;
+            this.FontSize = fontSize;
         }
 
         /// <summary>

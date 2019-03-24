@@ -49,7 +49,7 @@ namespace ImageCharts.Net.Charts
 
         public Chart()
         {
-            this.ChartData = new ChartData(DataFormat.AwesomeDataFormat);
+            this.ChartData = new ChartData();
         }
 
         public Chart(ChartData chartData)
@@ -63,8 +63,26 @@ namespace ImageCharts.Net.Charts
         /// </summary>
         /// <param name="duration">The duration of the gif in milliesconds (maximum is 1500)</param>
         /// <param name="easing">The easing type of the animation.</param>
-        public string GetUrlAnimated(int duration, AnimationEasing easing) =>
-            $"{this.GetUrl()}&chan={duration},{char.ToLower(easing.ToString()[0])}{easing.ToString().Substring(1)}";
+        public string GetUrlAnimated(int duration, AnimationEasing easing)
+        {
+            var chartProperties = this.GetChartProperties();
+
+            chartProperties.Add(ChartProperty.Animation, $"{duration},{char.ToLower(easing.ToString()[0])}{easing.ToString().Substring(1)}");
+
+            chartProperties[ChartProperty.OutputFormat] = ".gif";
+
+            // Order chart properties so that the output format is at the end (otherwise a file extension wouldn't make any sense at all)
+            var returnValue =  chartProperties.OrderBy(x => x.Key == ChartProperty.OutputFormat);
+
+            var urlBuilder = new StringBuilder(imagechartsBaseUrl);
+
+            foreach (var chartProperty in returnValue)
+            {
+                urlBuilder.Append($"&{chartProperty.Key.GetUrlFormat()}={chartProperty.Value}");
+            }
+
+            return urlBuilder.ToString();
+        }
 
         /// <summary>
         /// Gets a url that can be used to retrieve a plotted chart from the imagecharts service with the current properties of the chart object
@@ -121,11 +139,11 @@ namespace ImageCharts.Net.Charts
 
                 if (this.Fill is SingleColorFill colorFill)
                 {
-                    chartProperties[ChartProperty.Fill] = $"{this.Fill.GetFillTypeSpecifier()},s,{colorFill.Color.GetHexString()}";
+                    chartProperties[ChartProperty.Fill] = $"{this.Fill.FillType.GetUrlFormat()},s,{colorFill.Color.GetHexString()}";
                 }
                 else if (this.Fill is GradientFill gradientFill)
                 {
-                    chartProperties[ChartProperty.Fill] = $"{this.Fill.GetFillTypeSpecifier()},lg,{gradientFill.Angle}," +
+                    chartProperties[ChartProperty.Fill] = $"{this.Fill.FillType.GetUrlFormat()},lg,{gradientFill.Angle}," +
                         $"{string.Join(",", gradientFill.GradientColors.Select(x => $"{x.Color.GetHexString()},{x.CenterPoint}"))}";
                 }
             }

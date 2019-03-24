@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ImageCharts.Net.Enums
+﻿namespace ImageCharts.Net.Enums
 {
+    /// <summary>
+    /// The style of line fill
+    /// </summary>
     public enum LineFillType
     {
         /// <summary>

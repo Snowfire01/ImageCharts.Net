@@ -11,7 +11,7 @@ namespace ImageCharts.Net.Charts
     {
         public BarChartStyle BarChartStyle { get; set; }
 
-        public GridLines? GridLines { get; set; }
+        public GridLines GridLines { get; set; }
 
         public BarChart() : base() { }
 
@@ -73,35 +73,18 @@ namespace ImageCharts.Net.Charts
             }
 
             // Add grid lines
-            if (this.GridLines.HasValue)
+            if (this.GridLines != null)
             {
-                var gridLines = this.GridLines.Value;
-
                 chartProperties.Add(ChartProperty.GridLines,
-                    $"{Convert.ToInt32(gridLines.ShowHorizontalGridLines)}," +
-                    $"{Convert.ToInt32(gridLines.ShowVerticalGridLines)}," +
-                    $"{gridLines.DashLength ?? 4}," +
-                    $"{gridLines.SpaceLength ?? 1}");
+                    $"{Convert.ToInt32(this.GridLines.ShowHorizontalGridLines)}," +
+                    $"{Convert.ToInt32(this.GridLines.ShowVerticalGridLines)}," +
+                    $"{this.GridLines.DashLength}," +
+                    $"{this.GridLines.SpaceLength}");
             }
 
             return chartProperties;
         }
 
-        protected override string GetChartTypeSpecifier()
-        {
-            switch (this.BarChartStyle)
-            {
-                case BarChartStyle.GroupedVertically:
-                    return "bvg";
-                case BarChartStyle.GroupedHorizontally:
-                    return "bhg";
-                case BarChartStyle.StackedVertically:
-                    return "bvs";
-                case BarChartStyle.StackedHorizontally:
-                    return "bhs";
-                default:
-                    throw new InvalidOperationException($"{this.BarChartStyle} is not a valid bar chart style.");
-            }
-        }
+        protected override string GetChartTypeSpecifier() => this.BarChartStyle.GetUrlFormat();
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Types of background fills that can be used for a chart
     /// </summary>
-    public enum Filltype
+    public enum FillType
     {
         /// <summary>
         /// Fills the whole background of the chart

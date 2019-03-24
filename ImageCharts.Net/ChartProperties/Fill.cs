@@ -2,27 +2,14 @@
 
 namespace ImageCharts.Net.ChartProperties
 {
+    /// <summary>
+    /// Describes any fill
+    /// </summary>
     public abstract class Fill
     {
         /// <summary>
-        /// The chart area to fill.
+        /// The fill type of the fill.
         /// </summary>
-        public Filltype Filltype { get; set; }
-
-        /// <summary>
-        /// Gets the specifier for the fill type to be used in the URL
-        /// </summary>
-        internal string GetFillTypeSpecifier()
-        {
-            switch (this.Filltype)
-            {
-                case Filltype.BackgroundFill:
-                    return "bg";
-                case Filltype.ChartAreaFill:
-                    return "c";
-                default:
-                    return null;
-            }
-        }
+        public FillType FillType { get; set; }
     }
 }
