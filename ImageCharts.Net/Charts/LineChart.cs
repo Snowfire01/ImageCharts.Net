@@ -89,10 +89,8 @@ namespace ImageCharts.Net.Charts
                     {
                         var lineFill = dataSeries.LineFill.Value;
                         var lineFillTypeString = lineFill.LineFillType == LineFillType.UnderLine ? "B" : "b";
-                        var lineFillEndLineString = lineFill.LineFillType == LineFillType.UnderLine ?
-                            $"{lineFill.FillStartStop.start}:{lineFill.FillStartStop.end}" : $"{lineFill.EndLineIndex}";
 
-                        lineFillStrings.Add($"{lineFillTypeString},{lineFill.Color.GetHexString()},{this.ChartData.DataSeries.IndexOf(dataSeries)},{lineFillEndLineString}");
+                        lineFillStrings.Add($"{lineFillTypeString},{lineFill.Color.GetHexString()},{this.ChartData.DataSeries.IndexOf(dataSeries)},0");
                     }
                 }
 
