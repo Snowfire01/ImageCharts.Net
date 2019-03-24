@@ -12,6 +12,8 @@ namespace ImageCharts.Net.Charts
     {
         public LineChartStyle LineChartStyle { get; set; }
 
+        public GridLines? GridLines { get; set; }
+
         public LineChart() : base() { }
 
         public LineChart(ChartData chartData, LineChartStyle lineChartStyle = LineChartStyle.Regular) : base(chartData)
@@ -122,6 +124,18 @@ namespace ImageCharts.Net.Charts
                 {
                     chartProperties[ChartProperty.LineAccent] += $"|{string.Join("|", shapeMarkerStrings)}";
                 }
+            }
+
+            // Add grid lines
+            if (this.GridLines.HasValue)
+            {
+                var gridLines = this.GridLines.Value;
+
+                chartProperties.Add(ChartProperty.GridLines,
+                    $"{Convert.ToInt32(gridLines.ShowHorizontalGridLines)}," +
+                    $"{Convert.ToInt32(gridLines.ShowVerticalGridLines)}," +
+                    $"{gridLines.DashLength ?? 4}," +
+                    $"{gridLines.SpaceLength ?? 1}");
             }
 
             return chartProperties;

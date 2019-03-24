@@ -47,8 +47,8 @@ namespace ImageCharts.Net.Extensions
                     return "chxl";
                 case ChartProperty.AxisLabelStyles:
                     return "chxs";
-                case ChartProperty.ShapeMarkers:
                 case ChartProperty.GridLines:
+                    return "chg";
                 default:
                     throw new ArgumentException(nameof(chartProperty), "Not a valid chart property");
             }

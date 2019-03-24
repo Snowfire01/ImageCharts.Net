@@ -11,6 +11,8 @@ namespace ImageCharts.Net.Charts
     {
         public BarChartStyle BarChartStyle { get; set; }
 
+        public GridLines? GridLines { get; set; }
+
         public BarChart() : base() { }
 
         public BarChart(ChartData chartData, BarChartStyle lineChartStyle) : base(chartData)
@@ -68,6 +70,18 @@ namespace ImageCharts.Net.Charts
                         chartProperties[ChartProperty.Fill] += $"|{string.Join("|", gradientStrings)}";
                     }
                 }
+            }
+
+            // Add grid lines
+            if (this.GridLines.HasValue)
+            {
+                var gridLines = this.GridLines.Value;
+
+                chartProperties.Add(ChartProperty.GridLines,
+                    $"{Convert.ToInt32(gridLines.ShowHorizontalGridLines)}," +
+                    $"{Convert.ToInt32(gridLines.ShowVerticalGridLines)}," +
+                    $"{gridLines.DashLength ?? 4}," +
+                    $"{gridLines.SpaceLength ?? 1}");
             }
 
             return chartProperties;

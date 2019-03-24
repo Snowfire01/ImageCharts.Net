@@ -25,7 +25,6 @@ namespace ImageCharts.Net.Enums
         AxisRange,
         AxisLabels,
         AxisLabelStyles,
-        ShapeMarkers,
         GridLines
     }
 }
