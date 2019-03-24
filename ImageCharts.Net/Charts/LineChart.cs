@@ -77,7 +77,7 @@ namespace ImageCharts.Net.Charts
             // Add line fill
             if (this.ChartData.DataSeries.Any(x => x.LineFill.HasValue))
             {
-                chartProperties.Add(ChartProperty.LineFill, string.Empty);
+                chartProperties.Add(ChartProperty.LineAccent, string.Empty);
 
                 var lineFillStrings = new List<string>();
 
@@ -94,7 +94,34 @@ namespace ImageCharts.Net.Charts
                     }
                 }
 
-                chartProperties[ChartProperty.LineFill] = string.Join("|", lineFillStrings);
+                chartProperties[ChartProperty.LineAccent] = string.Join("|", lineFillStrings);
+            }
+
+            // Add shape markers
+            if (this.ChartData.DataSeries.Any(x => x.ShapeMarker.HasValue))
+            {
+                var shapeMarkerStrings = new List<string>();
+
+                foreach (var dataSeries in this.ChartData.DataSeries)
+                {
+                    if (dataSeries.ShapeMarker.HasValue)
+                    {
+                        var shapeMarker = dataSeries.ShapeMarker.Value;
+
+                        shapeMarkerStrings.Add($"{shapeMarker.ShapeMarkerType.GetUrlFormat()},{shapeMarker.Color.GetHexString()}," +
+                            $"{this.ChartData.DataSeries.IndexOf(dataSeries)},-1,{shapeMarker.Size}");
+                    }
+                }
+
+                if (!chartProperties.ContainsKey(ChartProperty.LineAccent))
+                {
+                    chartProperties.Add(ChartProperty.LineAccent, string.Empty);
+                    chartProperties[ChartProperty.LineAccent] = string.Join("|", shapeMarkerStrings);
+                }
+                else
+                {
+                    chartProperties[ChartProperty.LineAccent] += $"|{string.Join("|", shapeMarkerStrings)}";
+                }
             }
 
             return chartProperties;

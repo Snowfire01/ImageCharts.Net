@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ImageCharts.Net.Enums;
+using System;
 
 namespace ImageCharts.Net.Extensions
 {
@@ -24,7 +23,7 @@ namespace ImageCharts.Net.Extensions
                     return "chf";
                 case ChartProperty.InsideLabel:
                     return "chli";
-                case ChartProperty.LineFill:
+                case ChartProperty.LineAccent:
                     return "chm";
                 case ChartProperty.LineStyle:
                     return "chls";
@@ -40,8 +39,50 @@ namespace ImageCharts.Net.Extensions
                     return "chtt";
                 case ChartProperty.Animation:
                     return "chan";
+                case ChartProperty.VisibleAxes:
+                    return "chxt";
+                case ChartProperty.AxisRange:
+                    return "chxr";
+                case ChartProperty.AxisLabels:
+                    return "chxl";
+                case ChartProperty.AxisLabelStyles:
+                    return "chxs";
+                case ChartProperty.ShapeMarkers:
+                case ChartProperty.GridLines:
                 default:
                     throw new ArgumentException(nameof(chartProperty), "Not a valid chart property");
+            }
+        }
+
+        internal static string GetUrlFormat(this ShapeMarkerType shapeMarker)
+        {
+            switch (shapeMarker)
+            {
+                case ShapeMarkerType.Circle:
+                    return "o";
+                case ShapeMarkerType.Cross:
+                    return "X";
+                case ShapeMarkerType.Diamond:
+                    return "d";
+                case ShapeMarkerType.Square:
+                    return "s";
+                case ShapeMarkerType.X:
+                    return "X";
+                default:
+                    throw new ArgumentException(nameof(shapeMarker), "Not a valid shape marker");
+            }
+        }
+
+        internal static string GetUrlFormat(this LineFillType lineFillType)
+        {
+            switch (lineFillType)
+            {
+                case LineFillType.UnderLine:
+                    return "B";
+                case LineFillType.BetweenLines:
+                    return "b";
+                default:
+                    throw new ArgumentException(nameof(lineFillType), "Not a valid line fill type");
             }
         }
     }

@@ -15,6 +15,8 @@ namespace ImageCharts.Net
 
         public LineFill? LineFill { get; set; }
 
+        public ShapeMarker? ShapeMarker { get; set; }
+
         public DataSeries(IEnumerable<DataPoint> dataPoints = null)
         {
             this.DataPoints = dataPoints?.ToList() ?? new List<DataPoint>();

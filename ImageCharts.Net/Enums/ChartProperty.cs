@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageCharts.Net
+namespace ImageCharts.Net.Enums
 {
     public enum ChartProperty
     {
@@ -15,11 +15,17 @@ namespace ImageCharts.Net
         DataPointLabels,
         InsideLabel,
         LineStyle,
-        LineFill,
+        LineAccent,
         Margin,
         Fill,
         DataFill,
         OutputFormat,
-        Animation
+        Animation,
+        VisibleAxes,
+        AxisRange,
+        AxisLabels,
+        AxisLabelStyles,
+        ShapeMarkers,
+        GridLines
     }
 }
