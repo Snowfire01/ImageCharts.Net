@@ -1,5 +1,6 @@
 ﻿using ImageCharts.Net.ChartProperties;
 using ImageCharts.Net.Enums;
+using ImageCharts.Net.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -34,20 +35,20 @@ namespace ImageCharts.Net.Charts
             return urlStringBuilder.ToString();
         }
 
-        public new string GetUrl()
+        protected override Dictionary<ChartProperty, string> GetChartProperties()
         {
-            var urlStringBuilder = new StringBuilder(base.GetUrl());
+            var chartProperties = base.GetChartProperties();
 
             // Add inside label
             if (!string.IsNullOrWhiteSpace(this.InsideLabel))
             {
-                urlStringBuilder.Append($"&chli={this.InsideLabel}");
+                chartProperties.Add(ChartProperty.InsideLabel, this.InsideLabel);
             }
 
             // Add colors
             if (this.ChartData.DataSeries.Any(x => x.Fill is SingleColorFill || x.Fill is MultiColorFill))
             {
-                urlStringBuilder.Append($"&chco=");
+                chartProperties.Add(ChartProperty.DataFill, string.Empty);
 
                 var colorStrings = new List<string>();
 
@@ -55,7 +56,7 @@ namespace ImageCharts.Net.Charts
                 {
                     if (fill is SingleColorFill singleColorFill)
                     {
-                        colorStrings.Add($"{singleColorFill.Color.GetHexString()}");
+                        colorStrings.Add(singleColorFill.Color.GetHexString());
                     }
                     else if (fill is MultiColorFill multiColorFill)
                     {
@@ -63,13 +64,10 @@ namespace ImageCharts.Net.Charts
                     }
                 }
 
-                urlStringBuilder.Append(string.Join(",", colorStrings));
+                chartProperties[ChartProperty.DataFill] = string.Join(",", colorStrings);
             }
 
-            // Some software like Flowdock, Slack or Facebook messenger (and so on...) needs an URL that ends with a valid image extension file to display it as an image.
-            urlStringBuilder.Append("&chof=.png");
-
-            return urlStringBuilder.ToString();
+            return chartProperties;
         }
 
         protected override string GetChartTypeSpecifier()

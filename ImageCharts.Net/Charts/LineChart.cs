@@ -1,5 +1,6 @@
 ﻿using ImageCharts.Net.ChartProperties;
 using ImageCharts.Net.Enums;
+using ImageCharts.Net.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,28 +29,32 @@ namespace ImageCharts.Net.Charts
             return urlStringBuilder.ToString();
         }
 
-        public new string GetUrl()
+        protected override Dictionary<ChartProperty, string> GetChartProperties()
         {
-            var urlStringBuilder = new StringBuilder(base.GetUrl());
+            var chartProperties = base.GetChartProperties();
 
             // Add colors
             if (this.ChartData.DataSeries.Any())
             {
-                urlStringBuilder.Append($"&chco=");
+                chartProperties.Add(ChartProperty.DataFill, string.Empty);
+
+                var colorStrings = new List<string>();
 
                 foreach (var fill in this.ChartData.DataSeries.Select(x => x.Fill))
                 {
                     if (fill is SingleColorFill singleColorFill)
                     {
-                        urlStringBuilder.Append($"{singleColorFill.Color.GetHexString()},");
+                        colorStrings.Add(singleColorFill.Color.GetHexString());
                     }
                 }
+
+                chartProperties[ChartProperty.DataFill] = string.Join(",", colorStrings);
             }
 
             // Add line style
             if (this.ChartData.DataSeries.Any(x => x.LineStyle.HasValue))
             {
-                urlStringBuilder.Append($"&chls=");
+                chartProperties.Add(ChartProperty.LineStyle, string.Empty);
 
                 var lineStyleStrings = new List<string>();
 
@@ -57,7 +62,8 @@ namespace ImageCharts.Net.Charts
                 {
                     if (dataSeries.LineStyle.HasValue)
                     {
-                        lineStyleStrings.Add($"{dataSeries.LineStyle.Value.Thickness},{dataSeries.LineStyle.Value.DashLength},{dataSeries.LineStyle.Value.SpaceLength}");
+                        lineStyleStrings.Add($"{dataSeries.LineStyle.Value.Thickness},{dataSeries.LineStyle.Value.DashLength}," +
+                            $"{dataSeries.LineStyle.Value.SpaceLength}");
                     }
                     else
                     {
@@ -65,15 +71,15 @@ namespace ImageCharts.Net.Charts
                     }
                 }
 
-                urlStringBuilder.Append(string.Join("|", lineStyleStrings));
+                chartProperties[ChartProperty.LineStyle] = string.Join("|", lineStyleStrings);
             }
 
             // Add line fill
             if (this.ChartData.DataSeries.Any(x => x.LineFill.HasValue))
             {
-                urlStringBuilder.Append($"&chm=");
+                chartProperties.Add(ChartProperty.LineFill, string.Empty);
 
-                var lineStyleStrings = new List<string>();
+                var lineFillStrings = new List<string>();
 
                 foreach (var dataSeries in this.ChartData.DataSeries)
                 {
@@ -81,20 +87,17 @@ namespace ImageCharts.Net.Charts
                     {
                         var lineFill = dataSeries.LineFill.Value;
                         var lineFillTypeString = lineFill.LineFillType == LineFillType.UnderLine ? "B" : "b";
-                        var lineFillEndLineString = lineFill.LineFillType == LineFillType.UnderLine ? 
+                        var lineFillEndLineString = lineFill.LineFillType == LineFillType.UnderLine ?
                             $"{lineFill.FillStartStop.start}:{lineFill.FillStartStop.end}" : $"{lineFill.EndLineIndex}";
 
-                        lineStyleStrings.Add($"{lineFillTypeString},{lineFill.Color.GetHexString()},{this.ChartData.DataSeries.IndexOf(dataSeries)},{lineFillEndLineString}");
+                        lineFillStrings.Add($"{lineFillTypeString},{lineFill.Color.GetHexString()},{this.ChartData.DataSeries.IndexOf(dataSeries)},{lineFillEndLineString}");
                     }
                 }
 
-                urlStringBuilder.Append(string.Join("|", lineStyleStrings));
+                chartProperties[ChartProperty.LineFill] = string.Join("|", lineFillStrings);
             }
 
-            // Some software like Flowdock, Slack or Facebook messenger (and so on...) needs an URL that ends with a valid image extension file to display it as an image.
-            urlStringBuilder.Append("&chof=.png");
-
-            return urlStringBuilder.ToString();
+            return chartProperties;
         }
 
         protected override string GetChartTypeSpecifier()

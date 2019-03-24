@@ -1,5 +1,6 @@
 ﻿using ImageCharts.Net.ChartProperties;
 using ImageCharts.Net.Enums;
+using ImageCharts.Net.Extensions;
 using ImageCharts.Net.Helpers;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace ImageCharts.Net.Charts
 {
     public abstract class Chart : IChart
     {
-        private readonly string imagechartsBaseUrl = "https://image-charts.com/chart";
+        protected const string imagechartsBaseUrl = "https://image-charts.com/chart?";
 
         /// <summary>
         /// The data that will be displayed in the chart
@@ -70,51 +71,70 @@ namespace ImageCharts.Net.Charts
         /// </summary>
         public string GetUrl()
         {
-            var urlStringBuilder = new StringBuilder(this.imagechartsBaseUrl);
+            // Order chart properties so that the output format is at the end (otherwise a file extension wouldn't make any sense at all)
+            var chartProperties = this.GetChartProperties().OrderBy(x => x.Key == ChartProperty.OutputFormat);
+
+            var urlBuilder = new StringBuilder(imagechartsBaseUrl);
+
+            foreach (var chartProperty in chartProperties)
+            {
+                urlBuilder.Append($"&{chartProperty.Key.GetUrlFormat()}={chartProperty.Value}");
+            }
+
+            return urlBuilder.ToString();
+        }
+
+        protected virtual Dictionary<ChartProperty, string> GetChartProperties()
+        {
+            var chartProperties = new Dictionary<ChartProperty, string>();
 
             // Add chart width and height as url parameters
-            urlStringBuilder.Append($"?cht={this.GetChartTypeSpecifier()}");
+            chartProperties.Add(ChartProperty.ChartType, this.GetChartTypeSpecifier());
 
             // Add chart width and height as url parameters
-            urlStringBuilder.Append($"&chs={this.ChartWidth}x{this.ChartHeight}");
+            chartProperties.Add(ChartProperty.Size, $"{this.ChartWidth}x{this.ChartHeight}");
 
             // Add chart title and its properties as url parameters
-            urlStringBuilder.Append($"&chtt={this.ChartTitle}&chts={this.ChartTitle.TextColor.GetHexString()},{this.ChartTitle.FontSize}");
+            chartProperties.Add(ChartProperty.Title, $"{this.ChartTitle}&chts={this.ChartTitle.TextColor.GetHexString()},{this.ChartTitle.FontSize}");
 
             // Add chart data as url parameter
-            urlStringBuilder.Append($"&chd={ChartDataEncoder.GetFormatSpecifier(this.ChartData)}:{ChartDataEncoder.GetEncodedValues(this.ChartData)}");
+            chartProperties.Add(ChartProperty.Data, $"{ChartDataEncoder.GetFormatSpecifier(this.ChartData)}:{ChartDataEncoder.GetEncodedValues(this.ChartData)}");
 
             // Add scaling for chart data (if necessary) as url parameter
             if (this.ChartData.DataFormat == DataFormat.TextFormatAutomaticScaling || this.ChartData.DataFormat == DataFormat.TextFormatCustomScaling)
             {
-                urlStringBuilder.Append($"$chds={ChartDataEncoder.GetScalingSpecifier(this.ChartData)}");
+                chartProperties.Add(ChartProperty.Scaling, $"{ChartDataEncoder.GetScalingSpecifier(this.ChartData)}");
             }
 
             // Add labels for data series as url parameter
-            urlStringBuilder.Append($"&chdl={string.Join("|", this.LegendItems)}");
+            chartProperties.Add(ChartProperty.DataSeriesLabels, $"{string.Join("|", this.LegendItems)}");
 
             // Add labels for each data point
-            urlStringBuilder.Append($"&chl={string.Join("|", this.ChartData.GetDataPoints().Select(x => x.Label))}");
+            chartProperties.Add(ChartProperty.DataPointLabels, $"{string.Join("|", this.ChartData.GetDataPoints().Select(x => x.Label))}");
 
             // Add chart margin as url parameter
-            urlStringBuilder.Append($"&chma={this.Margin.MarginLeft},{this.Margin.MarginRight},{this.Margin.MarginTop},{this.Margin.MarginBottom}");
+            chartProperties.Add(ChartProperty.Margin, $"{this.Margin.MarginLeft},{this.Margin.MarginRight},{this.Margin.MarginTop},{this.Margin.MarginBottom}");
 
             if (this.Fill != null)
             {
-                urlStringBuilder.Append("&chf=");
+                chartProperties.Add(ChartProperty.Fill, string.Empty);
 
                 if (this.Fill is SingleColorFill colorFill)
                 {
-                    urlStringBuilder.Append($"{this.Fill.GetFillTypeSpecifier()},s,{colorFill.Color.GetHexString()}");
+                    chartProperties[ChartProperty.Fill] = $"{this.Fill.GetFillTypeSpecifier()},s,{colorFill.Color.GetHexString()}";
                 }
                 else if (this.Fill is GradientFill gradientFill)
                 {
-                    urlStringBuilder.Append($"{this.Fill.GetFillTypeSpecifier()},lg,{gradientFill.Angle}," +
-                        $"{string.Join(",", gradientFill.GradientColors.Select(x => $"{x.Color.GetHexString()},{x.CenterPoint}"))}");
+                    chartProperties[ChartProperty.Fill] = $"{this.Fill.GetFillTypeSpecifier()},lg,{gradientFill.Angle}," +
+                        $"{string.Join(",", gradientFill.GradientColors.Select(x => $"{x.Color.GetHexString()},{x.CenterPoint}"))}";
                 }
             }
 
-            return urlStringBuilder.ToString();
+            // Some software like Flowdock, Slack or Facebook messenger (and so on...) needs an URL that ends with a valid image extension file to
+            // display it as an image.
+            chartProperties.Add(ChartProperty.OutputFormat, ".png");
+
+            return chartProperties;
         }
 
         protected abstract string GetChartTypeSpecifier();
