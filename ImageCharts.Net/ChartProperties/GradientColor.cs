@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ImageCharts.Net
+namespace ImageCharts.Net.ChartProperties
 {
     /// <summary>
     /// Contains properties for a gradient color fill

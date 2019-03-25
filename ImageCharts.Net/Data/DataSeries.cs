@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ImageCharts.Net
+namespace ImageCharts.Net.Data
 {
     /// <summary>
     /// Contains a series of data points and associated properties.

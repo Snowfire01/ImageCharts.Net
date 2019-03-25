@@ -1,4 +1,4 @@
-﻿namespace ImageCharts.Net
+﻿namespace ImageCharts.Net.ChartProperties
 {
     /// <summary>
     /// Describes the properties of a line in a line chart

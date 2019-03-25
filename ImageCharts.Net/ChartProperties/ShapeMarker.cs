@@ -1,7 +1,7 @@
 ﻿using ImageCharts.Net.Enums;
 using System.Drawing;
 
-namespace ImageCharts.Net
+namespace ImageCharts.Net.ChartProperties
 {
     /// <summary>
     /// Describes the properties of the shape markers that can be used to highlight the data points of a series

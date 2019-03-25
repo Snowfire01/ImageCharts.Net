@@ -1,4 +1,4 @@
-﻿namespace ImageCharts.Net
+﻿namespace ImageCharts.Net.Data
 {
     /// <summary>
     /// Describes a single data point on the chart

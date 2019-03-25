@@ -1,4 +1,4 @@
-﻿using ImageCharts.Net.ChartProperties;
+﻿using ImageCharts.Net.Data;
 using ImageCharts.Net.Enums;
 using System;
 using System.Collections.Generic;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ImageCharts.Net.ChartProperties
+namespace ImageCharts.Net.Data
 {
     /// <summary>
     /// Represents the data set out of which the graph will be generated

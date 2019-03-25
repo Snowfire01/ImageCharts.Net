@@ -1,7 +1,7 @@
 ﻿using ImageCharts.Net.Enums;
 using System.Drawing;
 
-namespace ImageCharts.Net
+namespace ImageCharts.Net.ChartProperties
 {
     /// <summary>
     /// Describes the fill under a line or between lines
