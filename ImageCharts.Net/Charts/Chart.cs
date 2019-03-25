@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ImageCharts.Net.Charts
 {
-    public abstract class Chart : IChart
+    public abstract class Chart
     {
         protected const string imagechartsBaseUrl = "https://image-charts.com/chart?";
 

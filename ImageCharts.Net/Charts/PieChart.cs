@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ImageCharts.Net.Charts
 {
-    public class PieChart : Chart, IChart
+    public class PieChart : Chart
     {
         /// <summary>
         /// The visual display style of the pie chart
