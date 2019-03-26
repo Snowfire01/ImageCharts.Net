@@ -37,13 +37,14 @@ namespace ImageCharts.Net.Charts
             }
 
             // Add colors
-            if (this.ChartData.DataSeries.Any(x => x.Fill is SingleColorFill || x.Fill is MultiColorFill))
+            if (this.ChartData.DataSeries.Any(x => x.Fill != null))
             {
-                chartProperties.Add(ChartProperty.DataFill, string.Empty);
+                var colors = this.ChartData.DataSeries.Select(x => x.Fill).ToList();
 
                 var colorStrings = new List<string>();
+                var gradientStrings = new List<string>();
 
-                foreach (var fill in this.ChartData.DataSeries.Select(x => x.Fill))
+                foreach (var fill in colors)
                 {
                     if (fill is SingleColorFill singleColorFill)
                     {
@@ -53,9 +54,34 @@ namespace ImageCharts.Net.Charts
                     {
                         colorStrings.Add($"{string.Join("|", multiColorFill.Colors.Select(x => x.Color.GetHexString()))}");
                     }
+
+                    else if (fill is GradientFill gradientFill)
+                    {
+                        var dataSeriesIndex = colors.IndexOf(fill);
+
+                        gradientStrings.Add($"b{dataSeriesIndex},lg,{gradientFill.Angle}," +
+                            $"{string.Join(",", gradientFill.GradientColors.Select(x => $"{x.Color.GetHexString()},{x.CenterPoint}"))}");
+                    }
                 }
 
-                chartProperties[ChartProperty.DataFill] = string.Join(",", colorStrings);
+                if (colorStrings.Any())
+                {
+                    chartProperties.Add(ChartProperty.DataFill, string.Empty);
+
+                    chartProperties[ChartProperty.DataFill] = string.Join(",", colorStrings);
+                }
+
+                if (gradientStrings.Any())
+                {
+                    if (!chartProperties.ContainsKey(ChartProperty.Fill))
+                    {
+                        chartProperties.Add(ChartProperty.Fill, string.Join("|", gradientStrings));
+                    }
+                    else
+                    {
+                        chartProperties[ChartProperty.Fill] += $"|{string.Join("|", gradientStrings)}";
+                    }
+                }
             }
 
             return chartProperties;
