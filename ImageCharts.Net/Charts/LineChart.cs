@@ -26,7 +26,7 @@ namespace ImageCharts.Net.Charts
             var chartProperties = base.GetChartProperties();
 
             // Add colors
-            if (this.ChartData.DataSeries.Any())
+            if (this.ChartData.DataSeries.Any(x => x.Fill is SingleColorFill))
             {
                 chartProperties.Add(ChartProperty.DataFill, string.Empty);
 
@@ -87,7 +87,7 @@ namespace ImageCharts.Net.Charts
             }
 
             // Add shape markers
-            if (this.ChartData.DataSeries.Any(x => x.ShapeMarker == null))
+            if (this.ChartData.DataSeries.Any(x => x.ShapeMarker != null))
             {
                 var shapeMarkerStrings = new List<string>();
 

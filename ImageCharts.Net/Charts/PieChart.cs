@@ -15,11 +15,6 @@ namespace ImageCharts.Net.Charts
         public PieChartStyle PieChartStyle { get; set; }
 
         /// <summary>
-        /// Collection of fills for single specific slices. Overrides 1
-        /// </summary>
-        public IEnumerable<SliceFill> SliceFills { get; set; }
-
-        /// <summary>
         /// Gets or Sets the inside label of the pie chart (only applies for doughnut charts)
         /// </summary>
         public string InsideLabel { get; set; }
@@ -59,7 +54,11 @@ namespace ImageCharts.Net.Charts
                     {
                         colorStrings.Add($"{string.Join("|", multiColorFill.Colors.Select(x => x.Color.GetHexString()))}");
                     }
-
+                    else if (fill is SliceFill sliceFill)
+                    {
+                        colorStrings.Add($"s{sliceFill.SeriesIndex}-{sliceFill.SliceIndex},lg,{sliceFill.Angle}," +
+                            $"{string.Join(",", sliceFill.GradientColors.Select(x => $"{x.Color.GetHexString()},{x.CenterPoint}"))}");
+                    }
                     else if (fill is GradientFill gradientFill)
                     {
                         var dataSeriesIndex = colors.IndexOf(fill);

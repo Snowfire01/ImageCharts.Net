@@ -16,7 +16,7 @@ namespace ImageCharts.Net.Charts
 
         public BarChart() : base() { }
 
-        public BarChart(ChartData chartData, BarChartStyle lineChartStyle) : base(chartData)
+        public BarChart(ChartData chartData, BarChartStyle barChartStyle) : base(chartData)
         {
             this.BarChartStyle = BarChartStyle;
         }

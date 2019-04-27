@@ -53,7 +53,7 @@ namespace ImageCharts.Net.Data
 
         public ChartData(IEnumerable<DataSeries> dataSeries)
         {
-            this.DataSeries = DataSeries.ToList();
+            this.DataSeries = dataSeries.ToList();
         }
 
         /// <summary>

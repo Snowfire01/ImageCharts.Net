@@ -3,7 +3,8 @@
     public enum ChartProperty
     {
         ChartType,
-        Title,
+        TitleText,
+        TitleFont,
         Size,
         Data,
         Scaling,

@@ -41,7 +41,7 @@ namespace ImageCharts.Net.Charts
         /// <summary>
         /// Collection of strings that will be displayed as legend items
         /// </summary>
-        public IEnumerable<string> LegendItems { get; set; }
+        public IEnumerable<string> LegendItems { get; set; } = new List<string>();
 
         /// <summary>
         /// The background fill of the chart. Can be either a <see cref="SingleColorFill"/> for single-color-backgrounds or a <see cref="GradientFill"/> for gradient backgrounds
@@ -114,7 +114,8 @@ namespace ImageCharts.Net.Charts
             chartProperties.Add(ChartProperty.Size, $"{this.ChartWidth}x{this.ChartHeight}");
 
             // Add chart title and its properties as url parameters
-            chartProperties.Add(ChartProperty.Title, $"{this.ChartTitle}&chts={this.ChartTitle.TextColor.GetHexString()},{this.ChartTitle.FontSize}");
+            chartProperties.Add(ChartProperty.TitleText, $"{this.ChartTitle.Text}");
+            chartProperties.Add(ChartProperty.TitleFont, $"{this.ChartTitle.TextColor.GetHexString()},{this.ChartTitle.FontSize}");
 
             // Add chart data as url parameter
             chartProperties.Add(ChartProperty.Data, $"{ChartDataEncoder.GetFormatSpecifier(this.ChartData)}:{ChartDataEncoder.GetEncodedValues(this.ChartData)}");
@@ -126,10 +127,16 @@ namespace ImageCharts.Net.Charts
             }
 
             // Add labels for data series as url parameter
-            chartProperties.Add(ChartProperty.DataSeriesLabels, $"{string.Join("|", this.LegendItems)}");
+            if (this.LegendItems.Any())
+            {
+                chartProperties.Add(ChartProperty.DataSeriesLabels, $"{string.Join("|", this.LegendItems)}");
+            }
 
             // Add labels for each data point
-            chartProperties.Add(ChartProperty.DataPointLabels, $"{string.Join("|", this.ChartData.GetDataPoints().Select(x => x.Label))}");
+            if (this.ChartData.GetDataPoints().Any(x => !string.IsNullOrWhiteSpace(x.Label)))
+            {
+                chartProperties.Add(ChartProperty.DataPointLabels, $"{string.Join("|", this.ChartData.GetDataPoints().Select(x => x.Label))}");
+            }
 
             // Add chart margin as url parameter
             chartProperties.Add(ChartProperty.Margin, $"{this.Margin.MarginLeft},{this.Margin.MarginRight},{this.Margin.MarginTop},{this.Margin.MarginBottom}");

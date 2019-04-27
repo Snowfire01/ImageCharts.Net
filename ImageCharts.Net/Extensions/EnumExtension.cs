@@ -35,8 +35,10 @@ namespace ImageCharts.Net.Extensions
                     return "chds";
                 case ChartProperty.Size:
                     return "chs";
-                case ChartProperty.Title:
+                case ChartProperty.TitleText:
                     return "chtt";
+                case ChartProperty.TitleFont:
+                    return "chts";
                 case ChartProperty.Animation:
                     return "chan";
                 case ChartProperty.VisibleAxes:
