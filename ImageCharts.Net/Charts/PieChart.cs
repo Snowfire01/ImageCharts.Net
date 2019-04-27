@@ -15,6 +15,11 @@ namespace ImageCharts.Net.Charts
         public PieChartStyle PieChartStyle { get; set; }
 
         /// <summary>
+        /// Collection of fills for single specific slices. Overrides 1
+        /// </summary>
+        public IEnumerable<SliceFill> SliceFills { get; set; }
+
+        /// <summary>
         /// Gets or Sets the inside label of the pie chart (only applies for doughnut charts)
         /// </summary>
         public string InsideLabel { get; set; }
