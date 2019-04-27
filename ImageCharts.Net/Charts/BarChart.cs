@@ -18,7 +18,7 @@ namespace ImageCharts.Net.Charts
 
         public BarChart(ChartData chartData, BarChartStyle barChartStyle) : base(chartData)
         {
-            this.BarChartStyle = BarChartStyle;
+            this.BarChartStyle = barChartStyle;
         }
 
         protected override Dictionary<ChartProperty, string> GetChartProperties()
