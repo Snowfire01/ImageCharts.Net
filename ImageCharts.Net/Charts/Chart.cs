@@ -34,7 +34,7 @@ namespace ImageCharts.Net.Charts
         public ChartTitle ChartTitle { get; set; }
 
         /// <summary>
-        /// The margin of the chart inrespect to the borders of the image
+        /// The margin of the chart in respect to the borders of the image
         /// </summary>
         public (int MarginLeft, int MarginRight, int MarginTop, int MarginBottom) Margin { get; set; }
 
@@ -48,12 +48,12 @@ namespace ImageCharts.Net.Charts
         /// </summary>
         public Fill Fill { get; set; }
 
-        public Chart()
+        protected Chart()
         {
             this.ChartData = new ChartData();
         }
 
-        public Chart(ChartData chartData)
+        protected Chart(ChartData chartData)
         {
             this.ChartData = chartData;
         }

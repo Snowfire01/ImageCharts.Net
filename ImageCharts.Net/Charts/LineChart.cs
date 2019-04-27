@@ -77,9 +77,15 @@ namespace ImageCharts.Net.Charts
                     if (dataSeries.LineFill != null)
                     {
                         var lineFill = dataSeries.LineFill;
-                        var lineFillTypeString = lineFill.LineFillType == LineFillType.UnderLine ? "B" : "b";
-
-                        lineFillStrings.Add($"{lineFillTypeString},{lineFill.Color.GetHexString()},{this.ChartData.DataSeries.IndexOf(dataSeries)},0");
+                         if (lineFill.LineFillType == LineFillType.UnderLine)
+                        {
+                            lineFillStrings.Add($"B,{lineFill.Color.GetHexString()},{this.ChartData.DataSeries.IndexOf(dataSeries)},0");
+                        }
+                        else
+                        {
+                            lineFillStrings.Add($"b,{lineFill.Color.GetHexString()},{this.ChartData.DataSeries.IndexOf(dataSeries)}," +
+                                $"{lineFill.EndLineIndex},0");
+                        }
                     }
                 }
 

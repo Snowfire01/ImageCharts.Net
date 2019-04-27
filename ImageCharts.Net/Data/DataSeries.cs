@@ -50,5 +50,18 @@ namespace ImageCharts.Net.Data
             this.LineFill = lineFill;
             this.ShapeMarker = shapeMarker;
         }
+
+        /// <summary>
+        /// Creates a new instance of a <see cref="DataSeries"/>
+        /// </summary>
+        /// <param name="dataPoints">The data points that will be represented by this data series</param>
+        public DataSeries(params DataPoint[] dataPoints)
+        {
+            this.DataPoints = dataPoints?.ToList() ?? new List<DataPoint>();
+            this.Fill = null;
+            this.LineStyle = null;
+            this.LineFill = null;
+            this.ShapeMarker = null;
+        }
     }
 }
