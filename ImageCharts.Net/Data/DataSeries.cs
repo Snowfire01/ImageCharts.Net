@@ -19,6 +19,8 @@ namespace ImageCharts.Net.Data
         /// </summary>
         public Fill Fill { get; set; }
 
+        public IEnumerable<Fill> DataFills { get; set; }
+
         /// <summary>
         /// Optional line style that can be used to describe the properties of the displayed line
         /// </summary>

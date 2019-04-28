@@ -4,3 +4,5 @@ dotnet: 2.0.0
 script:
   - dotnet restore
   - dotnet build
+notifications:
+  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
