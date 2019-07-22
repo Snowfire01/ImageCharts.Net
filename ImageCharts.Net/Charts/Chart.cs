@@ -48,6 +48,16 @@ namespace ImageCharts.Net.Charts
         /// </summary>
         public Fill Fill { get; set; }
 
+        /// <summary>
+        /// The axes that will be shown in the chart and that can be labeled. X is the horizontal, y the vertical axis.
+        /// </summary>
+        public VisibleAxes VisibleAxes { get; set; } = VisibleAxes.None;
+
+        /// <summary>
+        /// Todo: integrate in own axis object with other axis properties like styling
+        /// </summary>
+        public IEnumerable<string> HorizontalAxisLabels { get; set; }
+
         protected Chart()
         {
             this.ChartData = new ChartData();
@@ -124,6 +134,17 @@ namespace ImageCharts.Net.Charts
             if (this.ChartData.DataFormat == DataFormat.TextFormatAutomaticScaling || this.ChartData.DataFormat == DataFormat.TextFormatCustomScaling)
             {
                 chartProperties.Add(ChartProperty.Scaling, $"{ChartDataEncoder.GetScalingSpecifier(this.ChartData)}");
+            }
+
+            // Add axes
+            if (this.VisibleAxes != VisibleAxes.None)
+            {
+                chartProperties.Add(ChartProperty.VisibleAxes, $"{(this.VisibleAxes == VisibleAxes.Both ? "x,y" : this.VisibleAxes.ToString())}");
+
+                if (this.HorizontalAxisLabels.Count() > 1)
+                {
+                    chartProperties.Add(ChartProperty.AxisLabels, $"0:|{string.Join("|", this.HorizontalAxisLabels)}");
+                }
             }
 
             // Add labels for data series as url parameter

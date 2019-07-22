@@ -21,7 +21,7 @@ namespace ImageCharts.Net.Charts
             var chartProperties = base.GetChartProperties();
 
             // Add colors
-            if (this.ChartData.DataSeries.Any())
+            if (this.ChartData.DataSeries.Any(x => x.Fill is SingleColorFill))
             {
                 chartProperties.Add(ChartProperty.DataFill, string.Empty);
 
@@ -79,33 +79,6 @@ namespace ImageCharts.Net.Charts
                 }
 
                 chartProperties[ChartProperty.LineAccent] = string.Join("|", lineFillStrings);
-            }
-
-            // Add shape markers
-            if (this.ChartData.DataSeries.Any(x => x.ShapeMarker == null))
-            {
-                var shapeMarkerStrings = new List<string>();
-
-                foreach (var dataSeries in this.ChartData.DataSeries)
-                {
-                    if (dataSeries.ShapeMarker != null)
-                    {
-                        var shapeMarker = dataSeries.ShapeMarker;
-
-                        shapeMarkerStrings.Add($"{shapeMarker.ShapeMarkerType.GetUrlFormat()},{shapeMarker.Color.GetHexString()}," +
-                            $"{this.ChartData.DataSeries.IndexOf(dataSeries)},-1,{shapeMarker.Size}");
-                    }
-                }
-
-                if (!chartProperties.ContainsKey(ChartProperty.LineAccent))
-                {
-                    chartProperties.Add(ChartProperty.LineAccent, string.Empty);
-                    chartProperties[ChartProperty.LineAccent] = string.Join("|", shapeMarkerStrings);
-                }
-                else
-                {
-                    chartProperties[ChartProperty.LineAccent] += $"|{string.Join("|", shapeMarkerStrings)}";
-                }
             }
 
             // Add grid lines
